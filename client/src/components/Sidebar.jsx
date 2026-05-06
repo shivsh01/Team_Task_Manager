@@ -71,7 +71,6 @@ export default function Sidebar({ isOpen, onClose }) {
         >
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0"
-            style={{ background: "linear-gradient(135deg,#3b82f6,#1d4ed8)" }}
           >
             {initials}
           </div>

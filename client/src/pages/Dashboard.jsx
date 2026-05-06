@@ -93,11 +93,11 @@ export default function Dashboard() {
         <span style={{ color: "#e0e0e0", fontWeight: 500 }}>Dashboard</span>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <h1 className="text-xl font-semibold" style={{ color: "#e0e0e0" }}>
           Analytics — {project?.title}
         </h1>
-        <button onClick={() => navigate(`/projects/${id}`)} className="btn-secondary">
+        <button onClick={() => navigate(`/projects/${id}`)} className="btn-secondary self-start sm:self-auto">
           View tasks
         </button>
       </div>

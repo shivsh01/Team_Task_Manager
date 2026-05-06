@@ -92,7 +92,7 @@ export default function ProjectDetails() {
         </div>
 
         {/* Page header */}
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
             <h1 className="text-xl font-semibold" style={{ color: "#e0e0e0" }}>
               {project.title}
@@ -114,7 +114,7 @@ export default function ProjectDetails() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 flex-wrap sm:shrink-0">
             <button
               onClick={() => navigate(`/projects/${id}/dashboard`)}
               className="btn-secondary"
