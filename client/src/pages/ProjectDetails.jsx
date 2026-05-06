@@ -137,10 +137,10 @@ export default function ProjectDetails() {
           </div>
         </div>
 
-        {/* Stats bar */}
+        <div className="overflow-x-auto">
         <div
           className="flex items-stretch rounded-xl overflow-hidden"
-          style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}
+          style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", minWidth: 480 }}
         >
           {[
             { label: "Total tasks", value: tasks.length, color: "#e0e0e0" },
@@ -155,14 +155,11 @@ export default function ProjectDetails() {
               style={{ borderLeft: i > 0 ? "1px solid #2a2a2a" : "none" }}
             >
               <p className="text-xs" style={{ color: "#888888" }}>{s.label}</p>
-              <p className="text-xl font-semibold mt-0.5" style={{ color: s.color }}>
-                {s.value}
-              </p>
+              <p className="text-xl font-semibold mt-0.5" style={{ color: s.color }}>{s.value}</p>
             </div>
           ))}
         </div>
-
-        {/* Kanban board */}
+        </div>
         {tasksLoading ? (
           <div className="flex items-center justify-center h-40">
             <Loader2 size={22} className="animate-spin" style={{ color: "#3b82f6" }} />
@@ -178,7 +175,6 @@ export default function ProjectDetails() {
                   className="flex flex-col rounded-xl"
                   style={{ border: "1px solid #2a2a2a", background: "#1a1a1a" }}
                 >
-                  {/* Column header */}
                   <div
                     className="flex items-center justify-between px-4 py-3 rounded-t-xl"
                     style={{ borderBottom: "1px solid #2a2a2a" }}
@@ -200,7 +196,6 @@ export default function ProjectDetails() {
                     </span>
                   </div>
 
-                  {/* Tasks */}
                   <div className="p-3 space-y-2.5 flex-1 min-h-[100px]">
                     {colTasks.length === 0 && (
                       <div className="flex flex-col items-center justify-center py-10"
@@ -214,7 +209,6 @@ export default function ProjectDetails() {
                     ))}
                   </div>
 
-                  {/* Add task shortcut */}
                   {isAdmin && (
                     <button
                       onClick={() => setTaskFormOpen(true)}

@@ -106,10 +106,11 @@ export default function ProjectList() {
           </div>
         </div>
 
-        {/* Stats bar — Shopify style */}
+        {/* Stats bar */}
+        <div className="overflow-x-auto">
         <div
           className="flex items-stretch rounded-xl overflow-hidden"
-          style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}
+          style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", minWidth: 400 }}
         >
           {[
             { label: "Total projects", value: projects.length },
@@ -136,6 +137,7 @@ export default function ProjectList() {
             </div>
           ))}
         </div>
+        </div>{/* end overflow-x-auto */}
 
         {/* Table card */}
         <div
@@ -144,11 +146,11 @@ export default function ProjectList() {
         >
           {/* Toolbar */}
           <div
-            className="flex items-center gap-3 px-4 py-3"
+            className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-4 py-3"
             style={{ borderBottom: "1px solid #2a2a2a" }}
           >
             {/* Tabs */}
-            <div className="flex items-center gap-1 p-1 rounded-lg" style={{ background: "#161616" }}>
+            <div className="flex items-center gap-1 p-1 rounded-lg self-start" style={{ background: "#161616" }}>
               {TABS.map((t) => (
                 <button
                   key={t}
@@ -166,7 +168,7 @@ export default function ProjectList() {
             </div>
 
             {/* Search */}
-            <div className="relative ml-auto">
+            <div className="relative sm:ml-auto w-full sm:w-auto">
               <Search
                 size={14}
                 className="absolute left-2.5 top-1/2 -translate-y-1/2"
@@ -174,8 +176,8 @@ export default function ProjectList() {
               />
               <input
                 type="text"
-                className="input pl-8 text-sm"
-                style={{ width: 220, height: 34 }}
+                className="input pl-8 text-sm w-full sm:w-52"
+                style={{ height: 34 }}
                 placeholder="Search projects"
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
@@ -221,6 +223,68 @@ export default function ProjectList() {
               )}
             </div>
           ) : (
+            <>
+            <div className="md:hidden">
+              {filtered.map((p) => {
+                const isAdmin = p.admin?._id === user?._id;
+                const role = isAdmin ? "admin" : "member";
+                const sc = STATUS_COLORS[role];
+                return (
+                  <div
+                    key={p._id}
+                    className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors"
+                    style={{ borderBottom: "1px solid #222222" }}
+                    onClick={() => navigate(`/projects/${p._id}`)}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#1e1e1e")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                  >
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0"
+                      style={{ background: "linear-gradient(135deg,#60a5fa,#3b82f6)" }}
+                    >
+                      {p.title[0].toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate" style={{ color: "#e0e0e0" }}>
+                        {p.title}
+                      </p>
+                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                        <span className="badge text-xs" style={{ background: sc.bg, color: sc.color }}>{role}</span>
+                        <span className="text-xs" style={{ color: "#666666" }}>
+                          {p.members?.length || 0} members · {p.tasks?.length || 0} tasks
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className="flex items-center gap-1 shrink-0"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {isAdmin && (
+                        <button
+                          onClick={() => setMemberModal(p)}
+                          className="p-2 rounded-lg transition-colors"
+                          style={{ color: "#666666" }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "#1e3a5f"; e.currentTarget.style.color = "#60a5fa"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#666666"; }}
+                        >
+                          <UserPlus size={15} />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => navigate(`/projects/${p._id}/dashboard`)}
+                        className="p-2 rounded-lg transition-colors"
+                        style={{ color: "#666666" }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = "#2a2a2a"; e.currentTarget.style.color = "#e0e0e0"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#666666"; }}
+                      >
+                        <BarChart2 size={15} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="hidden md:block overflow-x-auto">
             <table className="data-table">
               <thead>
                 <tr>
@@ -265,7 +329,6 @@ export default function ProjectList() {
                         <div className="flex items-center gap-2.5">
                           <div
                             className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0"
-                            style={{ background: "linear-gradient(135deg,#60a5fa,#3b82f6)" }}
                           >
                             {p.title[0].toUpperCase()}
                           </div>
@@ -362,6 +425,8 @@ export default function ProjectList() {
                 })}
               </tbody>
             </table>
+            </div>
+            </>
           )}
         </div>
       </div>

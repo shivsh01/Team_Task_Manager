@@ -1,6 +1,6 @@
-import { NavLink } from "react-router-dom";
-import { Home, FolderOpen, Plus, BarChart2, Settings } from "lucide-react";
-import { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { Home, FolderOpen, Plus, X } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProjectsApi } from "../api/projectApi";
 import CreateProjectModal from "./CreateProjectModal";
@@ -31,9 +31,16 @@ const NavItem = ({ to, icon: Icon, label, badge, end }) => (
   </NavLink>
 );
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const [open, setOpen] = useState(false);
   const user = useAuthStore((s) => s.user);
+  const location = useLocation();
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    if (firstRender.current) { firstRender.current = false; return; }
+    onClose?.();
+  }, [location.pathname]);
 
   const { data } = useQuery({
     queryKey: ["projects"],
@@ -49,14 +56,15 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className="flex flex-col h-full shrink-0"
+        className={`fixed md:relative inset-y-0 left-0 z-30 flex flex-col h-screen md:h-full shrink-0 transition-transform duration-200 ease-in-out ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
         style={{
           width: 240,
           background: "#161616",
           borderRight: "1px solid #222222",
         }}
       >
-        {/* Store / brand header */}
         <div
           className="flex items-center gap-2.5 px-4 py-3"
           style={{ borderBottom: "1px solid #222222" }}
@@ -75,9 +83,17 @@ export default function Sidebar() {
               {user?.email}
             </p>
           </div>
+          <button
+            className="md:hidden p-1 rounded-lg transition-colors"
+            style={{ color: "#666666" }}
+            onClick={onClose}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#2a2a2a"; e.currentTarget.style.color = "#e0e0e0"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#666666"; }}
+          >
+            <X size={16} />
+          </button>
         </div>
 
-        {/* Primary navigation */}
         <nav className="flex-1 overflow-y-auto p-2 space-y-0.5">
           <NavItem to="/projects" end icon={Home} label="Home" />
           <NavItem
@@ -87,7 +103,6 @@ export default function Sidebar() {
             badge={projects.length}
           />
 
-          {/* My Projects section */}
           <div className="pt-3">
             <div
               className="flex items-center justify-between px-3 mb-1.5"
@@ -140,7 +155,6 @@ export default function Sidebar() {
           </div>
         </nav>
 
-        {/* Bottom actions */}
         <div className="p-2 space-y-0.5" style={{ borderTop: "1px solid #222222" }}>
           <button
             onClick={() => setOpen(true)}
@@ -150,14 +164,6 @@ export default function Sidebar() {
             <Plus size={16} />
             <span>New project</span>
           </button>
-          {/* <NavLink
-            to="/projects"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors hover:bg-[#222222]"
-            style={{ color: "#6d7175" }}
-          >
-            <Settings size={16} />
-            <span>Settings</span>
-          </NavLink> */}
         </div>
       </aside>
 

@@ -69,7 +69,6 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-5">
-      {/* Breadcrumb */}
       <div className="flex items-center gap-1.5 text-sm" style={{ color: "#888888" }}>
         <button
           onClick={() => navigate("/projects")}
@@ -94,7 +93,6 @@ export default function Dashboard() {
         <span style={{ color: "#e0e0e0", fontWeight: 500 }}>Dashboard</span>
       </div>
 
-      {/* Page title */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold" style={{ color: "#e0e0e0" }}>
           Analytics — {project?.title}
@@ -104,28 +102,27 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* Stats bar */}
-      <div
-        className="flex items-stretch rounded-xl overflow-hidden"
-        style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}
-      >
-        {stats.map((s, i) => (
-          <div
-            key={s.label}
-            className="flex-1 px-5 py-4"
-            style={{ borderLeft: i > 0 ? "1px solid #2a2a2a" : "none" }}
-          >
-            <p className="text-xs" style={{ color: "#888888" }}>{s.label}</p>
-            <p className="text-2xl font-semibold mt-0.5" style={{ color: s.color }}>
-              {s.value}
-            </p>
-          </div>
-        ))}
+      <div className="overflow-x-auto">
+        <div
+          className="flex items-stretch rounded-xl overflow-hidden"
+          style={{ background: "#1a1a1a", border: "1px solid #2a2a2a", minWidth: 480 }}
+        >
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className="flex-1 px-5 py-4"
+              style={{ borderLeft: i > 0 ? "1px solid #2a2a2a" : "none" }}
+            >
+              <p className="text-xs" style={{ color: "#888888" }}>{s.label}</p>
+              <p className="text-2xl font-semibold mt-0.5" style={{ color: s.color }}>
+                {s.value}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {/* Pie */}
         <div className="rounded-xl p-5" style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}>
           <p className="text-sm font-semibold mb-4" style={{ color: "#e0e0e0" }}>
             Tasks by status
@@ -166,7 +163,6 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* Bar */}
         <div className="rounded-xl p-5" style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}>
           <p className="text-sm font-semibold mb-4" style={{ color: "#e0e0e0" }}>
             Tasks per member
@@ -192,7 +188,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Member table */}
       <div className="rounded-xl overflow-hidden" style={{ background: "#1a1a1a", border: "1px solid #2a2a2a" }}>
         <div className="px-5 py-4" style={{ borderBottom: "1px solid #2a2a2a" }}>
           <p className="text-sm font-semibold" style={{ color: "#e0e0e0" }}>Member summary</p>
@@ -200,6 +195,7 @@ export default function Dashboard() {
         {tasksByUser.length === 0 ? (
           <p className="p-5 text-sm" style={{ color: "#666666" }}>No member data.</p>
         ) : (
+          <div className="overflow-x-auto">
           <table className="data-table">
             <thead>
               <tr>
@@ -253,6 +249,7 @@ export default function Dashboard() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
